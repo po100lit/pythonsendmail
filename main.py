@@ -10,10 +10,10 @@ import email.mime.application
 
 
 def send_text_mail() -> None:
-    logging.info('Start logging...')
-    smtp_obj = smtplib.SMTP('smtp.gmail.com', 587)
-    smtp_obj.starttls()
-    smtp_obj.login('pytonsendmail@gmail.com', password=os.environ['gmail_pass'])
+    logging.warning('Start logging text mail...')
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.starttls()
+    s.login('pytonsendmail@gmail.com', os.environ['gmail_pass'])
     '''
     Как создать и использовать пароли приложений
     Важно! Чтобы создать пароль приложения, необходимо включить двухэтапную аутентификацию в аккаунте Google.
@@ -28,12 +28,13 @@ def send_text_mail() -> None:
             который генерируется на вашем устройстве.
         Нажмите Готово.
     '''
-    smtp_obj.sendmail("pytonsendmail@gmail.com", "po100lit@mail.ru", "go to bed!")
-    smtp_obj.quit()
+    s.sendmail(from_addr="pytonsendmail@gmail.com", to_addrs="po100lit@mail.ru", msg="go to bed!")
+    s.quit()
+    logging.warning('text message was sent')
 
 
 def send_attach_mail() -> None:
-    logging.info('Start logging...')
+    logging.warning('Start logging attach mail...')
 
     # Create a text/plain message
     msg = email.mime.multipart.MIMEMultipart()
@@ -61,11 +62,11 @@ def send_attach_mail() -> None:
     s.login('pytonsendmail@gmail.com', password=os.environ['gmail_pass'])
     s.sendmail("pytonsendmail@gmail.com", "po100lit@mail.ru", msg.as_string())
     s.quit()
-    logging.info('message with attach sent successfully')
+    logging.warning('message with attach sent successfully')
 
 
 if __name__ == '__main__':
     logging.basicConfig(filename='log_file.log', encoding='utf-8', level=logging.INFO, filemode='a',
                         format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    # send_text_mail()
+    send_text_mail()
     send_attach_mail()
